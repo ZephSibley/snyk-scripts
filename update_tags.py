@@ -4,6 +4,7 @@ from typing import List
 import sys
 
 from query_yes_no import query_yes_no
+from get_projects_by_repo import get_projects_by_repo
 
 import snyk
 
@@ -19,17 +20,6 @@ def get_org_id(client, name) -> List[str]:
     if not org_id:
         raise ValueError('Org name not found')
     return org_id[0]
-
-def get_projects_by_repo(client, repo_name, org_id=None) -> List:
-    if org_id is None:
-        orgs = client.organizations.all()
-        all_projects = [project for org in orgs for project in org.projects.all()]
-    else:
-        all_projects = client.organizations.get(org_id).projects.all()
-
-    projects = [project for project in all_projects if project.name.find(repo_name) != -1]
-    return projects 
-
 
 
 def main():
